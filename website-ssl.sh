@@ -156,12 +156,12 @@ EOF
 # crontab
 function install_crontab(){
     printf "\n# Let’s Encrypt 签发的证书只有90天有效期，可以设置为每月1号自动更新\n"
-    printf "0 0 1 * * sh $ssl_dir/website-ssl.sh upgrade >/dev/null 2>&1\n\n"
+    printf "0 0 1 * * sh $ssl_dir/website-ssl.sh renew >/dev/null 2>&1\n\n"
 }
 
 # 工具升级
 function tool_upgrade(){
-    wget -O - https://github.com/zxlie/website-ssl.sh/blob/master/website-ssl.sh > website-ssl.sh
+    curl -so website-ssl.sh https://github.com/zxlie/website-ssl.sh/blob/master/website-ssl.sh
     echo "工具已升级到最新版！"
     sh website-ssl.sh -v
 }
