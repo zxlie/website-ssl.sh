@@ -4,7 +4,7 @@ website-ssl.sh：网站ssl证书自动生成工具
 ## 一、简介
 网站`https化`已是大势所趋，个人blog也都可以把`https`玩儿起来！
 
-[Jerry Qu大神研究的很深](https://imququ.com/post/letsencrypt-certificate.html)，我把自己的操作步骤整合了一下，做成一个小工具，也许对大家有用！
+[Jerry Qu](https://imququ.com/post/letsencrypt-certificate.html)大神研究的很深，我把自己的操作步骤整合了一下，做成一个小工具，也许对大家有用！
 
 ## 二、使用方式
 ### 1、下载
@@ -155,4 +155,5 @@ sh website-ssl.sh version
 
 ## 三、意见反馈
 Site: https://www.baidufe.com
+
 Mail: xianliezhao@foxmail.com
