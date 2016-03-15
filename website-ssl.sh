@@ -184,9 +184,10 @@ function install_crontab(){
 function tool_upgrade(){
     curl -so website-ssl.new.sh https://github.com/zxlie/website-ssl.sh/blob/master/website-ssl.sh
     test_valid=$(grep -i -n "<!DOCTYPE html" website-ssl.new.sh | cut -d":" -f 1)
-    if [[ -z $test_valid || $test_valid -lt 10 ]];then
+    if [[ -z $test_valid || $test_valid -gt 10 ]];then
         echo "工具已升级到最新版！"
-        mv website-ssl.new.sh website-ssl.sh && sh website-ssl.sh -v
+        mv website-ssl.new.sh website-ssl.sh && chmod 0755 website-ssl.sh
+        sh website-ssl.sh -v
     else
         rm -rf website-ssl.new.sh
         echo "工具升级失败，请稍后再试，或者到「Github」进行源码更新："
