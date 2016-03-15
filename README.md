@@ -135,6 +135,26 @@ sh website-ssl.sh renew
 
 此命令会重新生成签名证书，并重启nginx，使得站点的`https`寿命延续
 
+下面是`baidufe.com`站点的证书自动更新日志：
+
+    [root@www-baidufe-com ssl]# sh website-ssl.sh renew
+    Parsing account key...
+    Parsing CSR...
+    Registering account...
+    Already registered!
+    Verifying baidufe.com...
+    baidufe.com verified!
+    Verifying static.baidufe.com...
+    static.baidufe.com verified!
+    Verifying www.baidufe.com...
+    www.baidufe.com verified!
+    Signing certificate...
+    Certificate signed!
+    
+    ssl-encrypt.pem文件创建成功！
+    Reloading nginx!
+    ssl证书自动更新成功！Nginx已重启！
+
 当然，我们完全可以不用手动来做这件事情，用`crontab`，省事又省心：
 ```bash
 sh website-ssl.sh crontab
