@@ -5,6 +5,22 @@
 # github: https://github.com/zxlie
 # ******************************************
 
+# 必须 root 账户运行
+if [ $(whoami) != 'root' ];then
+    echo `date "+%Y/%m/%d %H:%M:%S> "` "必须用 root 账户执行此脚本！"
+    exit
+fi
+
+# 当前工具的版本号
+tool_version="1.1"
+
+# 系统openssl.cnf文件的位置（可以不用管）
+openssl_cnf="/etc/ssl/openssl.cnf"
+
+# 安装配置文件
+function install_config(){
+    cat > wsl.cnf.sh <<EOF
+#!/bin/sh
 
 # ************************ 配置区域 START ******************************
 # 你的ssl主目录位置
@@ -14,18 +30,23 @@ challenges_dir="/home/work/www/challenges/"
 # 按照你的需求进行配置，多个域名用空格分开
 websites="your-website.com www.your-website.com"
 # ************************ 配置区域 END ********************************
+EOF
+}
 
-# 必须 root 账户运行
-if [ $(whoami) != 'root' ];then
-    echo `date "+%Y/%m/%d %H:%M:%S> "` "必须用 root 账户执行此脚本！"
-    exit
-fi
+# 检查配置文件是否已配置
+function check_config(){
+    if [[ ! -f wsl.cnf.sh ]];then
+        install_config
+    fi
 
-# 当前工具的版本号
-tool_version="1.0"
+    # 载入配置文件
+    source ./wsl.cnf.sh
 
-# 系统openssl.cnf文件的位置（可以不用管）
-openssl_cnf="/etc/ssl/openssl.cnf"
+    if [[ ! -d $ssl_dir || ! -d $challenges_dir || -z $websites ]];then
+        printf "\n您的配置文件「wsl.cnf.sh」配置不正确或还未进行配置，请检查！\n\n"
+        exit
+    fi
+}
 
 
 # 初始化，准备一些必要的文件
@@ -45,13 +66,13 @@ function init(){
 
     # 检查openssl.cnf文件是否存在，不存在则下载一个过来
     if [[ ! -f $openssl_cnf ]];then
-        wget --no-check-certificate -O - https://www.baidufe.com/upload/ssl-tools/openssl.cnf > openssl.cnf
+        curl -so openssl.cnf https://www.baidufe.com/upload/ssl-tools/openssl.cnf
         cp openssl.cnf /etc/ssl/
     fi
 
     # 检查acme_tiny.py文件是否存在，不存在则下载一个过来
     if [[ ! -f acme_tiny.py ]];then
-        wget --no-check-certificate -O - https://www.baidufe.com/upload/ssl-tools/acme_tiny.py > acme_tiny.py
+        curl -so acme_tiny.py https://www.baidufe.com/upload/ssl-tools/acme_tiny.py
     fi
 }
 
@@ -80,7 +101,7 @@ function create_pem(){
     # 申请证书crt文件
     python acme_tiny.py --account-key account.key --csr domain.csr --acme-dir $challenges_dir > signed.crt
     # 下载Let’s Encrypt 的中间证书
-    wget -O - https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem > lets-signed.pem
+    curl -so lets-signed.pem https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem
     # 俩证书合并，得到最终pem文件
     cat signed.crt lets-signed.pem > ssl-encrypt.pem
     rm -rf signed.crt lets-signed.pem
@@ -191,31 +212,38 @@ EOF
         exit
 }
 
+# app启动程序
+function app_start(){
+    # 第一步，一定是先检查配置啦
+    check_config
 
-case $1 in
-    csr)
-        init && create_csr && break
-        ;;
-    pem)
-        init && create_pem && break
-        ;;
-    renew)
-        auto_renew && break
-        ;;
-    nginx)
-        nginx_tpl && break
-        ;;
-    crontab)
-        install_crontab && break
-        ;;
-    upgrade)
-        tool_upgrade && break
-        ;;
-    -v|version)
-        show_version && break
-        ;;
-    *)
-        usage
-        break
-        ;;
-esac
+    case $1 in
+        csr)
+            init && create_csr && break
+            ;;
+        pem)
+            init && create_pem && break
+            ;;
+        renew)
+            auto_renew && break
+            ;;
+        nginx)
+            nginx_tpl && break
+            ;;
+        crontab)
+            install_crontab && break
+            ;;
+        upgrade)
+            tool_upgrade && break
+            ;;
+        -v|version)
+            show_version && break
+            ;;
+        *)
+            usage
+            break
+            ;;
+    esac
+}
+
+app_start $1
