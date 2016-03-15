@@ -1,4 +1,4 @@
-website-ssl.sh：网站ssl证书自动生成工具
+website-ssl.sh：低门槛跨入Https大门
 ----
 
 ## 一、简介
@@ -10,7 +10,7 @@ website-ssl.sh：网站ssl证书自动生成工具
 ### 1、下载
 ```bash
 # 下载工具
-curl -so xx.sh https://raw.githubusercontent.com/zxlie/website-ssl.sh/master/website-ssl.sh
+curl -so website-ssl.sh https://raw.githubusercontent.com/zxlie/website-ssl.sh/master/website-ssl.sh
 chmod 0755 website-ssl.sh
 ```
 没错，就这么下载了就能用了！当然，github源文件的下载，你也可以用你熟悉的任何方式！
