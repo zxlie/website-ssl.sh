@@ -147,7 +147,7 @@ function nginx_tpl(){
 
         # 所有http的请求都转向https
         location / {
-            rewrite ^/(.*)$ https://your-website.com/$1 permanent;
+            rewrite ^/(.*)$ https://$http_host$uri permanent;
         }
     }
 
