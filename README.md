@@ -164,7 +164,7 @@ sh website-ssl.sh crontab
 ```crontab
 
 # Let’s Encrypt 签发的证书只有90天有效期，可以设置为每月1号自动更新
-0 0 1 * * sh /home/work/www/ssl/website-ssl.sh renew >/dev/null 2>&1
+0 0 1 * * cd /home/work/www/ssl/ && sh website-ssl.sh renew >/dev/null 2>&1
 ```
 
 到此，你可以开开心心的用了！
@@ -184,7 +184,15 @@ sh website-ssl.sh -v
 sh website-ssl.sh version
 ```
 
-## 三、意见反馈
+## 三、疑难杂症
+如果出现shell脚本执行报语法错，那就试试这样：
+
+```bash
+chmod 0755 website-ssl.sh
+./website-ssl.sh
+```
+
+## 四、意见反馈
 Site: https://www.baidufe.com
 
 Mail: xianliezhao@foxmail.com
