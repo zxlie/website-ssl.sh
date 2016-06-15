@@ -163,8 +163,8 @@ sh website-ssl.sh crontab
 把输入的内容，添加到root账号下的crontab列表中，即可：
 ```crontab
 
-# Let’s Encrypt 签发的证书只有90天有效期，可以设置为每月1号自动更新
-0 0 1 * * cd /home/work/www/ssl/ && sh website-ssl.sh renew >/dev/null 2>&1
+# Let’s Encrypt 签发的证书只有90天有效期，可以设置为每两个月自动更新
+0 0 1 */2 * cd /home/work/www/ssl/ && rm -rf account.key chained.pem domain.csr domain.key ssl-encrypt.pem && sh website-ssl.sh renew >/dev/null 2>&1
 ```
 
 到此，你可以开开心心的用了！
