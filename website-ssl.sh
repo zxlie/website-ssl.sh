@@ -12,7 +12,7 @@ if [ $(whoami) != 'root' ];then
 fi
 
 # 当前工具的版本号
-tool_version="1.2"
+tool_version="2.0"
 
 # 系统openssl.cnf文件的位置（可以不用管）
 openssl_cnf="/etc/ssl/openssl.cnf"
@@ -66,13 +66,7 @@ function init(){
 
     # 检查openssl.cnf文件是否存在，不存在则下载一个过来
     if [[ ! -f $openssl_cnf ]];then
-        curl -so openssl.cnf https://www.baidufe.com/upload/ssl-tools/openssl.cnf
-        cp openssl.cnf /etc/ssl/
-    fi
-
-    # 检查acme_tiny.py文件是否存在，不存在则下载一个过来
-    if [[ ! -f acme_tiny.py ]];then
-        curl -so acme_tiny.py https://www.baidufe.com/upload/ssl-tools/acme_tiny.py
+        cp libs/openssl.cnf /etc/ssl/
     fi
 }
 
@@ -99,7 +93,7 @@ function create_pem(){
     fi
 
     # 申请证书crt文件
-    python acme_tiny.py --account-key account.key --csr domain.csr --acme-dir $challenges_dir > signed.crt
+    python libs/acme_tiny.py --account-key account.key --csr domain.csr --acme-dir $challenges_dir > signed.crt
     # 下载Let’s Encrypt 的中间证书
     curl -so lets-signed.pem https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem
     # 俩证书合并，得到最终pem文件
@@ -119,6 +113,16 @@ EOF
 
 # 自动更新证书文件
 function auto_renew(){
+
+    cd $ssl_dir
+
+    # 做文件备份
+    backup_dir="backup/"$(date +"%Y%m%d-%H%M%S")
+    mkdir -p $backup_dir
+    file_list=$(ls | grep "account.key\|domain.csr\|domain.key\|ssl-encrypt.pem")
+    for f in $file_list;do
+        mv $f $backup_dir
+    done
 
     init && create_pem
 
@@ -212,7 +216,7 @@ function usage(){
         csr       根据域名配置生成csr证书文件（For pem）
         pem       生成 Let's Encrypt 认可的pem证书文件
         nginx     获取nginx配置文件Demo
-        renew     更新pem证书文件
+        renew     更新ssl证书文件
         crontab   自动更新pem证书文件的crontab任务
         upgrade   升级「website-ssl.sh」工具到最新版
 
