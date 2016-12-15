@@ -5,6 +5,8 @@
 # github: https://github.com/zxlie
 # ******************************************
 
+printf "\n\n`date`> 升级Https证书\n"
+
 # 必须 root 账户运行
 if [ $(whoami) != 'root' ];then
     echo `date "+%Y/%m/%d %H:%M:%S> "` "必须用 root 账户执行此脚本！"
@@ -12,7 +14,7 @@ if [ $(whoami) != 'root' ];then
 fi
 
 # 当前工具的版本号
-tool_version="2.0"
+tool_version="2.1"
 
 # 系统openssl.cnf文件的位置（可以不用管）
 openssl_cnf="/etc/ssl/openssl.cnf"
@@ -127,7 +129,7 @@ function auto_renew(){
     init && create_pem
 
     # 重启nginx
-    service nginx reload
+    /sbin/service nginx reload
     echo "ssl证书自动更新成功！Nginx已重启！"
 }
 
@@ -181,7 +183,7 @@ EOF
 # crontab
 function install_crontab(){
     printf "\n# Let’s Encrypt 签发的证书只有90天有效期，可以设置为每月1号自动更新\n"
-    printf "0 0 1 * * sh $ssl_dir/website-ssl.sh renew >/dev/null 2>&1\n\n"
+    printf "0 0 1 * * cd $ssl_dir/ && sh website-ssl.sh renew >/dev/null 2>&1\n\n"
 }
 
 # 工具升级
