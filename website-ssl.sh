@@ -14,7 +14,7 @@ if [ $(whoami) != 'root' ];then
 fi
 
 # 当前工具的版本号
-tool_version="2.1"
+tool_version="2.2"
 
 # 系统openssl.cnf文件的位置（可以不用管）
 openssl_cnf="/etc/ssl/openssl.cnf"
@@ -161,12 +161,13 @@ function nginx_tpl(){
         listen 443 ssl;
         server_name  your-website.com;
 
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-        ssl_ciphers EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+AES128:RSA+AES128:EECDH+AES256:RSA+AES256:EECDH+3DES:RSA+3DES:!MD5;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 SSLv2;
+        ssl_ciphers EECDH+CHACHA20:EECDH+CHACHA20-draft:EECDH+ECDSA+AES128:EECDH+aRSA+AES128:RSA+AES128:EECDH+ECDSA+AES256:EECDH+aRSA+AES256:RSA+AES256:EECDH+ECDSA+3DES:EECDH+aRSA+3DES:RSA+3DES:!MD5;
         ssl_prefer_server_ciphers on;
         ssl_certificate $ssl_dir/ssl-encrypt.pem;
         ssl_certificate_key $ssl_dir/domain.key;
         ssl_session_timeout 5m;
+        ssl_session_cache shared:SSL:10m;
 
         index index.html;
         root /home/work/www;
