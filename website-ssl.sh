@@ -107,7 +107,7 @@ function create_pem(){
 
     # CA认证
     location ^~ /.well-known/acme-challenge/ {
-        alias $challenges_dir;
+        root $challenges_dir;
         try_files $uri =404;
     }
 EOF
@@ -147,7 +147,7 @@ function nginx_tpl(){
 
         # CA认证
         location ^~ /.well-known/acme-challenge/ {
-            alias $challenges_dir;
+            root $challenges_dir;
             try_files $uri =404;
         }
 
