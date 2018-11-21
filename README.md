@@ -15,7 +15,7 @@ chmod 0755 website-ssl.sh
 ```
 没错，就这么下载了就能用了！当然，github源文件的下载，你也可以用你熟悉的任何方式！
 
-**注意：**此工具会使用到`openssl`命令，请务必保证你的机器上已安装此工具！
+注意：此工具会使用到`openssl`命令，请务必保证你的机器上已安装此工具！
 
 ### 2、配置
 #### 2.1 wsl.cnf.sh的配置
@@ -82,14 +82,14 @@ location ^~ /.well-known/acme-challenge/ {
 ./website-ssl.sh pem
 ```
 
-**注：**这一步会自动为我们创建`domain.key`文件和`ssl-encrypt.pem`文件
+注：这一步会自动为我们创建`domain.key`文件和`ssl-encrypt.pem`文件
 
 #### step2：获取`nginx`配置的Demo
 ```bash
 ./website-ssl.sh nginx
 ```
 
-**注：**如果自己知道怎么配置nginx，这一步都可以忽略
+注：如果自己知道怎么配置nginx，这一步都可以忽略
 
 #### step3：配置自己的`nginx conf`文件
 核心就是配置一下这个：
