@@ -97,7 +97,7 @@ function create_pem(){
     # 申请证书crt文件
     python libs/acme_tiny.py --account-key account.key --csr domain.csr --acme-dir $challenges_dir > signed.crt
     # 下载Let’s Encrypt 的中间证书
-    curl -so lets-signed.pem https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem
+    curl -so lets-signed.pem https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem
     # 俩证书合并，得到最终pem文件
     cat signed.crt lets-signed.pem > ssl-encrypt.pem
     rm -rf signed.crt lets-signed.pem
