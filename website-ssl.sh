@@ -128,7 +128,7 @@ function auto_renew(){
 
     init && create_pem
 
-    # 重启nginx，判断是否存在servce命令，否则用nginx命令重启
+    # 重启nginx，判断是否存在service命令，否则用nginx命令重启
     if command -v service >/dev/null 2>&1; then
         service nginx reload
     else
