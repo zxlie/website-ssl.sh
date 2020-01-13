@@ -128,8 +128,12 @@ function auto_renew(){
 
     init && create_pem
 
-    # 重启nginx
-    /sbin/service nginx reload
+    # 重启nginx，判断是否存在servce命令，否则用nginx命令重启
+    if command -v service >/dev/null 2>&1; then
+        service nginx reload
+    else
+        nginx -s reload
+    fi
     echo "ssl证书自动更新成功！Nginx已重启！"
 }
 
